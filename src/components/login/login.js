@@ -20,7 +20,7 @@ export class Login extends React.Component {
     };
     fetch("http://localhost:5000/login/", requestOptions).then((data) => {
       localStorage.setItem("token", data);
-      this.props.history.push("s");
+      this.props.history.push("in");
     });
   };
   render() {
