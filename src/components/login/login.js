@@ -18,12 +18,10 @@ export class Login extends React.Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: login, password: password }),
     };
-    console.log(requestOptions);
-    fetch("http://localhost:5000/login/", requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        localStorage.setItem("token", data);
-      });
+    fetch("http://localhost:5000/login/", requestOptions).then((data) => {
+      localStorage.setItem("token", data);
+      this.props.history.push("s");
+    });
   };
   render() {
     return (

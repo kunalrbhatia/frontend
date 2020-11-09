@@ -3,8 +3,44 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
+import Snackbar from "@material-ui/core/Snackbar";
 export class SignUp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: "",
+      password: "",
+      fname: "",
+      lname: "",
+      message: "",
+      open: false,
+    };
+  }
+  submit = () => {
+    const { email, password, apassword, fname, lname } = this.state;
+    if (apassword === password) {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, password: password, fname: fname, lname: lname }),
+      };
+      fetch("http://localhost:5000/users/", requestOptions).then((data) => {
+        this.setState({ message: "User created!", open: true });
+        setTimeout(() => {
+          this.props.history.push("/");
+        }, 4000);
+      });
+    } else {
+      this.setState({ message: "Password & Confirm Password doesn't match!", open: true });
+    }
+
+    /* fetch("http://localhost:5000/login/", requestOptions).then((data) => {
+      localStorage.setItem("token", data);
+      this.props.history.push("s");
+    }); */
+  };
   render() {
+    const { email, password, apassword, fname, lname, message, open } = this.state;
     return (
       <div style={{ margin: "auto", width: " 50%", padding: "10px" }}>
         <Paper elevation={3} style={{ padding: 40, margin: 20 }}>
@@ -16,6 +52,9 @@ export class SignUp extends React.Component {
             placeholder="First Name"
             helperText="Enter your First Name here."
             fullWidth
+            onChange={(e) => {
+              this.setState({ fname: e.target.value });
+            }}
           />
           <TextField
             id="standard-basic"
@@ -24,6 +63,9 @@ export class SignUp extends React.Component {
             placeholder="Last Name"
             helperText="Enter your Last Name here."
             fullWidth
+            onChange={(e) => {
+              this.setState({ lname: e.target.value });
+            }}
           />
           <TextField
             id="standard-basic"
@@ -32,6 +74,9 @@ export class SignUp extends React.Component {
             placeholder="Email address"
             helperText="Enter your email address here."
             fullWidth
+            onChange={(e) => {
+              this.setState({ email: e.target.value });
+            }}
           />
           <TextField
             id="standard-basic"
@@ -41,6 +86,9 @@ export class SignUp extends React.Component {
             helperText="Enter your Password here."
             type="password"
             fullWidth
+            onChange={(e) => {
+              this.setState({ password: e.target.value });
+            }}
           />
           <TextField
             id="standard-basic"
@@ -50,8 +98,17 @@ export class SignUp extends React.Component {
             helperText="Enter your Password again here."
             type="password"
             fullWidth
+            onChange={(e) => {
+              this.setState({ apassword: e.target.value });
+            }}
           />
-          <Button variant="contained" color="primary" fullWidth style={{ margin: 10, position: "relative" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            style={{ margin: 10, position: "relative" }}
+            onClick={this.submit}
+          >
             Submit
           </Button>
 
@@ -59,6 +116,19 @@ export class SignUp extends React.Component {
             Back to Login
           </Link>
         </Paper>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          open={open}
+          onClose={(e) => {
+            setTimeout(() => {
+              this.setState({ open: false });
+            }, 3000);
+          }}
+          message={message}
+        ></Snackbar>
       </div>
     );
   }
