@@ -60,7 +60,7 @@ export class SignUp extends React.Component {
   render() {
     const { message, open } = this.state;
     return (
-      <div style={{ margin: "auto", width: " 50%", padding: "10px" }}>
+      <div style={{ margin: "auto", padding: "10px" }}>
         <Paper elevation={3} style={{ padding: 40, margin: 20 }}>
           <h3>Sign-up</h3>
           <TextField

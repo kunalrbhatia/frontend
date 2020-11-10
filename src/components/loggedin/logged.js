@@ -40,7 +40,7 @@ export class LoggedIn extends React.Component {
   render() {
     const { msgFromServer } = this.state;
     return (
-      <div style={{ margin: "auto", width: " 50%", padding: "10px" }}>
+      <div style={{ margin: "auto", padding: "10px" }}>
         <Button
           variant="contained"
           color="primary"

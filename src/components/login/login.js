@@ -82,7 +82,7 @@ export class Login extends React.Component {
   };
   render() {
     return (
-      <div style={{ margin: "auto", width: " 50%", padding: "10px" }}>
+      <div style={{ margin: "auto", padding: "10px" }}>
         <Paper elevation={3} style={{ padding: 40, margin: 20 }}>
           <h3>Login</h3>
           <TextField
