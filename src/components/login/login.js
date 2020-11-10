@@ -29,7 +29,35 @@ export class Login extends React.Component {
           console.error("Error:", error);
         });
     }
+    window.addEventListener("storage", (e) => {
+      this.verifyToken();
+    });
   }
+  verifyToken = () => {
+    this.token = localStorage.getItem("token");
+    if (this.token && this.token.length > 1) {
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("auth-token", this.token + "");
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+      };
+      fetch("http://localhost:5000/post/", requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          this.props.history.push("in");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          this.props.history.push("/");
+          this.setState({ loggedIn: false });
+        });
+    } else {
+      this.setState({ loggedIn: false });
+      this.props.history.push("/");
+    }
+  };
   submit = () => {
     const { login, password } = this.state;
     const requestOptions = {
@@ -41,7 +69,6 @@ export class Login extends React.Component {
       .then((response) => response.json())
       .then((data) => {
         localStorage.setItem("token", data);
-
         const requestOptions = {
           method: "POST",
           headers: { "auth-token": data + "" },
@@ -49,8 +76,6 @@ export class Login extends React.Component {
         fetch("http://localhost:5000/post/", requestOptions)
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
-            //this.props.history.push("in");
             this.props.history.push("in");
           });
       });

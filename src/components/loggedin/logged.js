@@ -4,9 +4,9 @@ import { Button } from "@material-ui/core";
 export class LoggedIn extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { msgFromServer: "" };
+    this.state = { msgFromServer: "", loggedIn: true };
   }
-  componentDidMount() {
+  verifyToken = () => {
     this.token = localStorage.getItem("token");
     if (this.token && this.token.length > 1) {
       const myHeaders = new Headers();
@@ -24,10 +24,18 @@ export class LoggedIn extends React.Component {
         .catch((error) => {
           console.error("Error:", error);
           this.props.history.push("/");
+          this.setState({ loggedIn: false });
         });
     } else {
+      this.setState({ loggedIn: false });
       this.props.history.push("/");
     }
+  };
+  componentDidMount() {
+    window.addEventListener("storage", (e) => {
+      this.verifyToken();
+    });
+    this.verifyToken();
   }
   render() {
     const { msgFromServer } = this.state;
@@ -40,6 +48,7 @@ export class LoggedIn extends React.Component {
           onClick={(e) => {
             localStorage.removeItem("token");
             this.props.history.push("/");
+            this.setState({ loggedIn: false });
           }}
         >
           Logout
