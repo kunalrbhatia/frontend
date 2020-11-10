@@ -1,5 +1,6 @@
 import React from "react";
 import Paper from "@material-ui/core/Paper";
+import { Button } from "@material-ui/core";
 export class LoggedIn extends React.Component {
   constructor(props) {
     super(props);
@@ -32,6 +33,17 @@ export class LoggedIn extends React.Component {
     const { msgFromServer } = this.state;
     return (
       <div style={{ margin: "auto", width: " 50%", padding: "10px" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ right: 30, float: "right", top: 30 }}
+          onClick={(e) => {
+            localStorage.removeItem("token");
+            this.props.history.push("/");
+          }}
+        >
+          Logout
+        </Button>
         <Paper elevation={3} style={{ padding: 40, margin: 20 }}>
           <h3>Welcome</h3>
           <h5>{msgFromServer}</h5>

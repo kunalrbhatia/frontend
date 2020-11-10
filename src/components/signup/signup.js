@@ -16,6 +16,24 @@ export class SignUp extends React.Component {
       open: false,
     };
   }
+  componentDidMount() {
+    this.token = localStorage.getItem("token");
+    if (this.token && this.token.length > 1) {
+      const requestOptions = {
+        method: "POST",
+        headers: { "auth-token": this.token + "" },
+      };
+      fetch("http://localhost:5000/post/", requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({ uid: data._id });
+          this.props.history.push("in");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  }
   submit = () => {
     const { email, password, apassword, fname, lname } = this.state;
     if (apassword === password) {
@@ -40,7 +58,7 @@ export class SignUp extends React.Component {
     }); */
   };
   render() {
-    const { email, password, apassword, fname, lname, message, open } = this.state;
+    const { message, open } = this.state;
     return (
       <div style={{ margin: "auto", width: " 50%", padding: "10px" }}>
         <Paper elevation={3} style={{ padding: 40, margin: 20 }}>
