@@ -19,6 +19,10 @@ export class LoggedIn extends React.Component {
         .then((response) => response.json())
         .then((data) => {
           this.setState({ uid: data.uid, msgFromServer: data.data });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          this.props.history.push("/");
         });
     } else {
       this.props.history.push("/");

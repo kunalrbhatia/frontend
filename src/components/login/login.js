@@ -24,6 +24,9 @@ export class Login extends React.Component {
         .then((data) => {
           this.setState({ uid: data._id });
           this.props.history.push("in");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
         });
     }
   }
