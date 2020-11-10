@@ -9,7 +9,23 @@ export class Login extends React.Component {
     this.state = {
       login: "",
       password: "",
+      uid: "",
     };
+  }
+  componentDidMount() {
+    this.token = localStorage.getItem("token");
+    if (this.token && this.token.length > 1) {
+      const requestOptions = {
+        method: "POST",
+        headers: { "auth-token": this.token + "" },
+      };
+      fetch("http://localhost:5000/post/", requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({ uid: data._id });
+          this.props.history.push("in");
+        });
+    }
   }
   submit = () => {
     const { login, password } = this.state;
@@ -18,10 +34,23 @@ export class Login extends React.Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: login, password: password }),
     };
-    fetch("http://localhost:5000/login/", requestOptions).then((data) => {
-      localStorage.setItem("token", data);
-      this.props.history.push("in");
-    });
+    fetch("http://localhost:5000/login/", requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        localStorage.setItem("token", data);
+
+        const requestOptions = {
+          method: "POST",
+          headers: { "auth-token": data + "" },
+        };
+        fetch("http://localhost:5000/post/", requestOptions)
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            //this.props.history.push("in");
+            this.props.history.push("in");
+          });
+      });
   };
   render() {
     return (
